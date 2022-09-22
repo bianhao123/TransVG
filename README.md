@@ -4,7 +4,7 @@
 
 ## 复现
 
-1. 首先按照官方教程配置环境, 数据划分的文件需放在`CODE_ROOT/data`
+1. 首先按照官方教程配置环境, 数据划分的文件需放在`CODE_ROOT/data`， 下载地址[[Gdrive]](https://drive.google.com/file/d/1fVwdDvXNbH8uuq_pHD_o5HI7yqeuz0yS/view?usp=sharing) or [[One Drive]](https://uofr-my.sharepoint.com/:f:/g/personal/zyang39_ur_rochester_edu/???),
 
    ```bash
    CODE_ROOT/data
@@ -71,7 +71,7 @@
    
    ```
 
-3. 放置detr的预训练模型，在`CODE_ROOT/checkpoints`
+3. 放置detr的预训练模型，在`CODE_ROOT/checkpoints`，下载地址[[Gdrive]](https://drive.google.com/drive/folders/1SOHPCCR6yElQmVp96LGJhfTP46RxVwzF?usp=sharing)
 
    ```bash
    checkpoints/
