@@ -1,14 +1,110 @@
 # TransVG
-<p align="center"> <img src='docs/framework.jpg' align="center" height="540px"> </p>
 
-This is the official implementation of [**TransVG: End-to-End Visual Grounding with Transformers**](https://arxiv.org/abs/2104.08541). This paper has been accepted by ICCV 2021.
+此仓库基于[djiajunustc/TransVG (github.com)](https://github.com/djiajunustc/TransVG)官方版本修改，by Hao Bian
 
-    @article{deng2021transvg,
-      title={TransVG: End-to-End Visual Grounding with Transformers},
-      author={Deng, Jiajun and Yang, Zhengyuan and Chen, Tianlang and Zhou, Wengang and Li, Houqiang},
-      journal={arXiv preprint arXiv:2104.08541},
-      year={2021}
-}
+## 复现
+
+1. 首先按照官方教程配置环境, 数据划分的文件需放在`CODE_ROOT/data`
+
+   ```bash
+   CODE_ROOT/data
+   ├── flickr
+   │   ├── corpus.pth
+   │   ├── flickr_test.pth
+   │   ├── flickr_train.pth
+   │   └── flickr_val.pth
+   ├── gref
+   │   ├── corpus.pth
+   │   ├── gref_train.pth
+   │   └── gref_val.pth
+   ├── gref_umd
+   │   ├── corpus.pth
+   │   ├── gref_umd_test.pth
+   │   ├── gref_umd_train.pth
+   │   └── gref_umd_val.pth
+   ├── referit
+   │   ├── corpus.pth
+   │   ├── referit_test.pth
+   │   ├── referit_train.pth
+   │   ├── referit_trainval.pth
+   │   └── referit_val.pth
+   ├── unc
+   │   ├── corpus.pth
+   │   ├── unc_testA.pth
+   │   ├── unc_testB.pth
+   │   ├── unc_train.pth
+   │   ├── unc_trainval.pth
+   │   └── unc_val.pth
+   └── unc+
+       ├── corpus.pth
+       ├── unc+_testA.pth
+       ├── unc+_testB.pth
+       ├── unc+_train.pth
+       ├── unc+_trainval.pth
+       └── unc+_val.pth
+   ```
+
+2. 原数据按如下格式放置在`CODE_ROOT/ln_data`, (可建立软链接，如`ln -s src_data_path CODE_ROOT/ln_data`, 源文件数据在公共目录`/cto_studio/datastory/phrase_grounding/dataset`)
+
+   ```bash
+   ln_data/
+   ├── data.tar
+   ├── MSCOCO
+   │   ├── train2014
+   ├── RefCOCO
+   │   ├── refcoco
+   │   │   ├── instances.json
+   │   │   ├── refs(google).p
+   │   │   └── refs(unc).p
+   │   ├── refcoco+
+   │   │   ├── instances.json
+   │   │   └── refs(unc).p
+   │   └── refcocog
+   │       ├── instances.json
+   │       ├── refs(google).p
+   │       └── refs(umd).p
+   └── Flickr
+   └── Flickr_Entities
+   └── VG
+   └── ZSG
+   
+   
+   ```
+
+3. 放置detr的预训练模型，在`CODE_ROOT/checkpoints`
+
+   ```bash
+   checkpoints/
+   ├── detr-r50-referit.pth
+   ├── detr-r50-unc.pth
+   └── download_detr_model.sh
+   ```
+
+   
+
+4. 写了一个脚本，方便不同数据集统一训练
+
+```bash
+GPUS=0 # 指定设备
+DATASET=refcoco # refcoco+, refcocog_g, refcocog_u
+sh train_dataset.sh $GPUS $DATASET
+```
+
+5. 写了一个脚本，方便不同数据集统一测试
+
+```bash
+GPUS=0 # 指定设备
+DATASET=refcoco # refcoco+, refcocog_g, refcocog_u
+sh test_dataset.sh $GPUS $DATASET
+```
+
+6. 复现结果文件在`CODE_ROOT/outputs`， 如refcoco数据集
+
+|                     | val                | testA              |
+| ------------------- | ------------------ | ------------------ |
+| refcoco（ResNet50） | 0.8118081180811808 | 0.8252032520325203 |
+
+
 
 ### Installation
 1.  Clone this repository.
