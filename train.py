@@ -25,6 +25,7 @@ from engine import train_one_epoch, validate
 def get_args_parser():
     parser = argparse.ArgumentParser(
         'Set transformer detector', add_help=False)
+    parser.add_argument('--mode', default="learnable", type=str)
     parser.add_argument('--lr', default=1e-4, type=float)
     parser.add_argument('--lr_bert', default=1e-5, type=float)
     parser.add_argument('--lr_visu_cnn', default=1e-5, type=float)

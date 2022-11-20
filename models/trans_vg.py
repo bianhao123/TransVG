@@ -29,6 +29,7 @@ class TransVG(nn.Module):
 
         self.vl_transformer = build_vl_transformer(args)
         self.bbox_embed = MLP(hidden_dim, hidden_dim, 4, 3)
+        self.mode = args.mode
 
 
     def forward(self, img_data, text_data):
@@ -48,7 +49,19 @@ class TransVG(nn.Module):
         text_mask = text_mask.flatten(1)
 
         # target regression token
-        tgt_src = self.reg_token.weight.unsqueeze(1).repeat(1, bs, 1)
+        if self.mode == 'learnable':
+            tgt_src = self.reg_token.weight.unsqueeze(1).repeat(1, bs, 1)
+        elif self.mode == 'visual_avg':
+            tpt_src = visu_src.mean(0).unsqueeze(1).repeat(1, bs, 1)
+        elif self.mode == 'visual_max':
+            tpt_src = visu_src.max(0).unsqueeze(1).repeat(1, bs, 1)
+        elif self.mode == 'linguistic_avg':
+            tpt_src = text_src.mean(0).unsqueeze(1).repeat(1, bs, 1)
+        elif self.mode == 'linguistic_max':
+            tpt_src = text_src.max(0).unsqueeze(1).repeat(1, bs, 1)
+        elif self.mode == 'class_token':
+            tpt_src = text_data[0].unsqueeze(1).repeat(1, bs, 1)
+
         tgt_mask = torch.zeros((bs, 1)).to(tgt_src.device).to(torch.bool)
         
         vl_src = torch.cat([tgt_src, text_src, visu_src], dim=0)
